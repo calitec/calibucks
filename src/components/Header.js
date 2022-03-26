@@ -3,11 +3,10 @@ import { Link } from "react-router-dom";
 import { css } from "@emotion/react";
 import media from "../lib/media";
 import { useRecoilState } from "recoil";
-import { homeState, searchState } from "../store/homeState";
+import { searchState } from "../store/homeState";
 import { useState } from "react";
 
 export default function Header() {
-  const [data, setData] = useRecoilState(homeState);
   const [keyword, setKeyword] = useRecoilState(searchState);
   const [search, setSearch] = useState(false);
   const onSearch = () => setSearch(!search);
@@ -65,6 +64,8 @@ const wrapper = css`
     }
     div {
       display: inline-block;
+      position: relative;
+      top: 2px;
       vertical-align: middle;
       h1 {
         display: inline-block;
@@ -85,7 +86,7 @@ const wrapper = css`
       }
       &.header-cart {
         position: relative;
-        top: -2px;
+        top: -1px;
       }
     }
   }
@@ -93,6 +94,12 @@ const wrapper = css`
     position: fixed;
     top: 48px;
     width: 100%;
+    z-index: 2;
+    ${media.desktop} {
+      width: 50%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
     input {
       padding-left: 1em;
       width: 100%;

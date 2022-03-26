@@ -20,6 +20,8 @@ export default function Layout() {
 
 const wrapper = css`
   main {
+    position: relative;
+    top: 48px;
     ${media.desktop} {
       width: 50%;
       margin: 0 auto;
