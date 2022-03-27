@@ -41,7 +41,7 @@ export default function Header() {
       </nav>
       {search && (
         <div className="header-search">
-          <input type="text" value={keyword} onChange={onChange} />
+          <input type="text" autoFocus value={keyword} onChange={onChange} />
           <span onClick={onClose}>&times;</span>
         </div>
       )}
