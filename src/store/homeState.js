@@ -16,6 +16,11 @@ export const detailState = atom({
   default: null,
 });
 
+export const filterState = atom({
+  key: "filterState",
+  default: "",
+});
+
 export const searchSelector = selector({
   key: "searchSelector",
   get: ({ get }) => {
@@ -29,5 +34,16 @@ export const searchSelector = selector({
         );
       });
     }
+  },
+});
+
+export const filterSelector = selector({
+  key: "filterSelector",
+  get: ({ get }) => {
+    let filter = get(filterState);
+    let home = get(homeState);
+    return home.filter((item) => {
+      return item.category == filter;
+    });
   },
 });

@@ -5,6 +5,7 @@ import { Outlet } from "react-router-dom";
 import media from "../lib/media";
 import Header from "./Header";
 import Loading from "./Loading";
+
 export default function Layout() {
   return (
     <section css={wrapper}>
@@ -23,7 +24,7 @@ const wrapper = css`
     position: relative;
     top: 48px;
     ${media.desktop} {
-      width: 50%;
+      width: 40%;
       margin: 0 auto;
     }
   }

@@ -1,22 +1,17 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from "recoil";
 import Button from "../components/Button";
-import { orderSelector, orderState } from "../store/orderState";
+import { getFullPriceSelector, orderState } from "../store/orderState";
 import { NavLink } from "react-router-dom";
 
 export default function Order() {
   const [order, setOrder] = useRecoilState(orderState);
   const [checks, setChecks] = useState([]);
   const navigate = useNavigate();
-  useRecoilValue(orderSelector);
-
-  const onClearStore = () => {
-    setOrder([]);
-    localStorage.clear();
-  };
+  const fullPrice = useRecoilValue(getFullPriceSelector(checks));
 
   const onCheckAll = (checked) => {
     if (checked) {
@@ -40,17 +35,19 @@ export default function Order() {
     }
   };
 
-  const fullPrice = () => {
-    return (
-      checks.length &&
-      checks
-        .map((item) => {
-          const { price, quantity } = item;
-          return +price * +quantity;
-        })
-        .reduce((prev, current, index) => prev + current)
-    );
-  };
+  const onClearStore = () => setOrder([]);
+
+  // const fullPrice = () => {
+  //   return (
+  //     checks.length &&
+  //     checks
+  //       .map((item) => {
+  //         const { price, quantity } = item;
+  //         return +price * +quantity;
+  //       })
+  //       .reduce((prev, current, index) => prev + current)
+  //   );
+  // };
 
   const onSubmit = () => {
     if (checks.length < 1) return;
@@ -78,14 +75,17 @@ export default function Order() {
                 <input
                   type="checkbox"
                   className="check"
-                  checked={checks.includes(item) ? true : false}
+                  checked={
+                    checks.map((v) => v.id).includes(item.id) ? true : false
+                  }
                   onChange={(e) => onCheck(e.target.checked, item)}
                 />
-                <div>
+                <div className="order-item-body">
                   <h3>{name}</h3>
                   <span>{Number(price).toLocaleString()} 원</span>
                   <div className="order-count">
                     <span
+                      className={quantity == 1 ? "inactivated" : ""}
                       onClick={() => {
                         const decrease = order.map((v, i) => {
                           if (item !== v) {
@@ -114,13 +114,15 @@ export default function Order() {
                             quantity: quantity < 10 ? quantity + 1 : 10,
                           };
                         });
-                        console.log(increase, "incerease");
                         setOrder(increase);
                         setChecks([]);
                       }}
                     >
                       +
                     </span>
+                  </div>
+                  <div className="detail-quantity-notice">
+                    {quantity == 10 && "최대 수량입니다."}
                   </div>
                 </div>
                 <NavLink to={`/detail/${id}`}>
@@ -132,7 +134,7 @@ export default function Order() {
         ) : (
           <div className="default">주문 할 상품이 없습니다</div>
         )}
-        <div>총 주문 가격: {fullPrice().toLocaleString()} 원</div>
+        <div>총 주문 가격: {fullPrice} 원</div>
       </ul>
       <Button onClick={onSubmit} activate={checks.length >= 1}>
         결제하기
@@ -151,14 +153,35 @@ const wrapper = css`
       input {
         width: 10%;
       }
-      div {
+      .order-item-body {
         display: inline-block;
         vertical-align: middle;
         width: 70%;
+        h3 {
+          margin-bottom: 0.3em;
+        }
         .order-count {
+          display: inline-block;
           span {
-            padding: 1em;
+            display: inline-block;
+            position: relative;
+            top: -1px;
+            margin: 0 1em;
+            width: 19px;
+            height: 19px;
+            border: 1px solid #363636;
+            border-radius: 50%;
+            text-align: center;
+            vertical-align: middle;
+            &.inactivated {
+              opacity: 0.25;
+            }
           }
+        }
+        .detail-quantity-notice {
+          position: absolute;
+          color: red;
+          font-size: 0.8em;
         }
       }
       a {

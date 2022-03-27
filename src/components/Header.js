@@ -3,13 +3,20 @@ import { Link } from "react-router-dom";
 import { css } from "@emotion/react";
 import media from "../lib/media";
 import { useRecoilState } from "recoil";
-import { searchState } from "../store/homeState";
+import { filterState, searchState } from "../store/homeState";
 import { useState } from "react";
 
 export default function Header() {
   const [keyword, setKeyword] = useRecoilState(searchState);
+  const [_, setFilter] = useRecoilState(filterState);
   const [search, setSearch] = useState(false);
   const onSearch = () => setSearch(!search);
+
+  const onChange = (e) => {
+    setFilter("");
+    setKeyword(e.target.value);
+  };
+
   const onClose = () => {
     setKeyword("");
     setSearch(!search);
@@ -34,11 +41,7 @@ export default function Header() {
       </nav>
       {search && (
         <div className="header-search">
-          <input
-            type="text"
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-          />
+          <input type="text" value={keyword} onChange={onChange} />
           <span onClick={onClose}>&times;</span>
         </div>
       )}
@@ -57,7 +60,7 @@ const wrapper = css`
     background-color: #ffffff;
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
     ${media.desktop} {
-      width: 50%;
+      width: 40%;
       left: 50%;
       transform: translateX(-50%);
       margin: 0 auto;

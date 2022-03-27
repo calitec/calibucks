@@ -3,6 +3,8 @@ import { css } from "@emotion/react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
   detailState,
+  filterSelector,
+  filterState,
   homeState,
   searchSelector,
   searchState,
@@ -12,14 +14,36 @@ import Item from "../components/Item";
 export default function Home() {
   const data = useRecoilValue(homeState);
   const [_, setDetail] = useRecoilState(detailState);
-  const [keyword, setKeyword] = useRecoilState(searchState);
-  const filterdData = useRecoilValue(searchSelector);
+  const keyword = useRecoilValue(searchState);
+  const searchedData = useRecoilValue(searchSelector);
+  const filteredData = useRecoilValue(filterSelector);
+  const [filter, setFilter] = useRecoilState(filterState);
 
   return (
     <section css={wrapper}>
+      <div className="category">
+        <ul>
+          <li onClick={() => setFilter("")}>전체</li>
+          <li onClick={() => setFilter("coldbrew")}>콜드브루</li>
+          <li onClick={() => setFilter("blended")}>블렌디드</li>
+        </ul>
+      </div>
       <ul>
-        {keyword.length > 1
-          ? filterdData.map((item, index) => {
+        {filteredData.length
+          ? filteredData.map((item, index) => {
+              const { id, image, name, price } = item;
+              const props = {
+                index,
+                id,
+                image,
+                name,
+                price,
+                onSelectItem: () => setDetail(item),
+              };
+              return <Item key={id} {...props} />;
+            })
+          : keyword.length > 1
+          ? searchedData.map((item, index) => {
               const { id, image, name, price } = item;
               const props = {
                 index,
@@ -49,18 +73,42 @@ export default function Home() {
 }
 
 const wrapper = css`
+  .category {
+    ul {
+      display: flex;
+      justify-content: space-between;
+      padding: 1em 0;
+      li {
+        flex: 1;
+        text-align: center;
+      }
+    }
+  }
   ul {
     width: 100%;
-    li {
+    a {
       float: left;
-      width: 50%;
-      font-size: 0.8em;
-      img {
-        width: 100%;
+      width: calc(50% - 0.75em);
+      margin: 0 auto;
+      margin: 0 0.5em;
+      &:nth-of-type(even) {
+        margin-left: 0;
       }
-      > div {
-        padding: 0.5em;
+      li {
+        font-size: 0.8em;
+        img {
+          display: block;
+          width: 100%;
+        }
+        > div {
+          padding: 0.5em;
+        }
       }
+    }
+    &::after {
+      display: block;
+      content: "";
+      clear: both;
     }
   }
 `;
