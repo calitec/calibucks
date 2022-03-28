@@ -27,6 +27,7 @@ export default function Order() {
       setCheckAtom(idResult);
     } else {
       setChecks([]);
+      setCheckAtom([]);
     }
   };
 
