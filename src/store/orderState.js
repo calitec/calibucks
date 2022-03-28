@@ -18,18 +18,28 @@ export const orderState = atom({
   effects: [localStorageEffect("coffee")],
 });
 
+export const checkState = atom({
+  key: "checkState",
+  default: [],
+});
+
 export const getFullPriceSelector = selector({
   key: "getFullPriceSelector",
   get: ({ get }) => {
+    let checks = get(checkState);
     let orders = get(orderState);
-    if (orders) {
-      const result = orders
-        .map((item) => {
-          const { price, quantity } = item;
-          return +price * +quantity;
-        })
-        .reduce((prev, current, _) => prev + current);
+    if (checks.length && orders) {
+      const result =
+        orders.length &&
+        orders
+          .map((item) => {
+            const { price, quantity } = item;
+            return +price * +quantity;
+          })
+          .reduce((prev, current, _) => prev + current);
       return result;
+    } else {
+      return 0;
     }
   },
 });
