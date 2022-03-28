@@ -5,6 +5,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import media from "../lib/media";
 import Header from "./Header";
 import Loading from "./Loading";
+import ErrorBoundary from "./ErrorBoundary";
 
 export default function Layout() {
   const location = useLocation();
@@ -14,9 +15,11 @@ export default function Layout() {
       <Header />
       <main>
         {location.pathname == "/" ? (
-          <Suspense fallback={<Loading />}>
-            <Outlet />
-          </Suspense>
+          <ErrorBoundary>
+            <Suspense fallback={<Loading />}>
+              <Outlet />
+            </Suspense>
+          </ErrorBoundary>
         ) : (
           <Outlet />
         )}

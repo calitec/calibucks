@@ -3,7 +3,7 @@ import Home from "./pages/Home";
 import Order from "./pages/Order";
 import Layout from "./components/Layout";
 import NotFound from "./pages/NotFound";
-import Detail from "./components/Detail";
+import Detail from "./pages/Detail";
 import useCacheImage from "./hooks/useCacheImage";
 import Complete from "./pages/Complete";
 

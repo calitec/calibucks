@@ -11,6 +11,8 @@ export default function useCacheImage() {
       "/images/06.jpg",
       "/images/07.jpg",
       "/images/08.jpg",
-    ].forEach((v) => (new Image().src = v));
+    ].forEach((picture) => {
+      new Image().src = picture;
+    });
   }, []);
 }

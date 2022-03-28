@@ -4,6 +4,7 @@ import data from "../data.json";
 const datas = () => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
+      // reject(new Error());
       resolve(data);
     }, 500);
   });
@@ -14,6 +15,11 @@ export const homeState = atom({
   default: datas(),
 });
 
+export const filterState = atom({
+  key: "filterState",
+  default: "",
+});
+
 export const searchState = atom({
   key: "searchState",
   default: {
@@ -22,14 +28,15 @@ export const searchState = atom({
   },
 });
 
-export const detailState = atom({
-  key: "detailState",
-  default: null,
-});
-
-export const filterState = atom({
-  key: "filterState",
-  default: "",
+export const filterSelector = selector({
+  key: "filterSelector",
+  get: ({ get }) => {
+    let filter = get(filterState);
+    let home = get(homeState);
+    return home.filter((item) => {
+      return item.category == filter;
+    });
+  },
 });
 
 export const searchSelector = selector({
@@ -47,16 +54,5 @@ export const searchSelector = selector({
         );
       });
     }
-  },
-});
-
-export const filterSelector = selector({
-  key: "filterSelector",
-  get: ({ get }) => {
-    let filter = get(filterState);
-    let home = get(homeState);
-    return home.filter((item) => {
-      return item.category == filter;
-    });
   },
 });

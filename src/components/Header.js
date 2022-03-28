@@ -2,7 +2,7 @@
 import { Link } from "react-router-dom";
 import { css } from "@emotion/react";
 import { useRecoilState } from "recoil";
-import { filterState, searchState } from "../store/homeState";
+import { filterState, searchState } from "../store/commonState";
 import media from "../lib/media";
 
 export default function Header() {

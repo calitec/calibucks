@@ -84,18 +84,13 @@ const wrapper = css`
       }
       span {
         display: inline-block;
-        -webkit-animation: skeleton-gradient 1.8s infinite ease-in-out;
-        animation: skeleton-gradient 1.8s infinite ease-in-out;
-        background-color: rgba(165, 165, 165, 0.1);
         width: 100%;
         padding-top: 15%;
         margin-top: 1em;
+        -webkit-animation: skeleton-gradient 1.8s infinite ease-in-out;
+        animation: skeleton-gradient 1.8s infinite ease-in-out;
+        background-color: rgba(165, 165, 165, 0.1);
       }
-    }
-    &::after {
-      display: block;
-      content: "";
-      clear: both;
     }
   }
   @-webkit-keyframes skeleton-gradient {

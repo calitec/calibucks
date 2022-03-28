@@ -3,13 +3,12 @@ import { memo } from "react";
 import { css } from "@emotion/react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
-  detailState,
   filterSelector,
   filterState,
   homeState,
   searchSelector,
   searchState,
-} from "../store/homeState";
+} from "../store/commonState";
 import { NavLink } from "react-router-dom";
 import media from "../lib/media";
 
@@ -18,7 +17,6 @@ export default function Home() {
   const { keyword } = useRecoilValue(searchState);
   const searchedData = useRecoilValue(searchSelector);
   const filteredData = useRecoilValue(filterSelector);
-  const [_, setDetail] = useRecoilState(detailState);
   const [__, setFilter] = useRecoilState(filterState);
 
   return (
@@ -35,49 +33,43 @@ export default function Home() {
           ? filteredData.map((item, index) => {
               const { id, image, name, price } = item;
               const props = {
-                index,
                 id,
                 image,
                 name,
                 price,
-                onSelectItem: () => setDetail(item),
               };
-              return <Item key={id} {...props} />;
+              return <List key={id} {...props} />;
             })
           : keyword.length > 1
           ? searchedData.map((item, index) => {
               const { id, image, name, price } = item;
               const props = {
-                index,
                 id,
                 image,
                 name,
                 price,
-                onSelectItem: () => setDetail(item),
               };
-              return <Item key={id} {...props} />;
+              return <List key={id} {...props} />;
             })
           : data.map((item, index) => {
               const { id, image, name, price } = item;
               const props = {
-                index,
                 id,
                 image,
                 name,
                 price,
-                onSelectItem: () => setDetail(item),
               };
-              return <Item key={id} {...props} />;
+              return <List key={id} {...props} />;
             })}
       </ul>
     </section>
   );
 }
 
-const Item = memo(({ id, image, name, price, onSelectItem }) => {
+const List = memo(({ id, image, name, price }) => {
   return (
     <NavLink to={`/detail/${id}`}>
-      <li onClick={onSelectItem}>
+      <li>
         <img src={`/images/${image}`} alt={image} />
         <div>
           <h3>{name}</h3>
@@ -110,6 +102,11 @@ const wrapper = css`
   }
   > ul {
     width: 100%;
+    &::after {
+      display: block;
+      content: "";
+      clear: both;
+    }
     a {
       float: left;
       width: calc(50% - 0.75em);
@@ -128,11 +125,6 @@ const wrapper = css`
           padding: 0.5em;
         }
       }
-    }
-    &::after {
-      display: block;
-      content: "";
-      clear: both;
     }
   }
 `;
