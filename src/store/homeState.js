@@ -1,14 +1,25 @@
 import { atom, selector } from "recoil";
 import data from "../data.json";
 
+const datas = () => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(data);
+    }, 500);
+  });
+};
+
 export const homeState = atom({
   key: "homeState",
-  default: data,
+  default: datas(),
 });
 
 export const searchState = atom({
   key: "searchState",
-  default: "",
+  default: {
+    keyword: "",
+    toggle: false,
+  },
 });
 
 export const detailState = atom({
@@ -29,8 +40,10 @@ export const searchSelector = selector({
     if (search) {
       return home.filter((item) => {
         return (
-          item.name.split(" ").join("").indexOf(search.split(" ").join("")) !==
-          -1
+          item.name
+            .split(" ")
+            .join("")
+            .indexOf(search.keyword.split(" ").join("")) !== -1
         );
       });
     }

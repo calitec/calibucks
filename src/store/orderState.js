@@ -1,4 +1,4 @@
-import { atom, selector, selectorFamily } from "recoil";
+import { atom, selector } from "recoil";
 
 const localStorageEffect = (key) => ({ setSelf, onSet }) => {
   const savedValue = localStorage.getItem(key);
@@ -18,20 +18,18 @@ export const orderState = atom({
   effects: [localStorageEffect("coffee")],
 });
 
-export const getFullPriceSelector = selectorFamily({
+export const getFullPriceSelector = selector({
   key: "getFullPriceSelector",
-  get: (checks) => ({ get }) => {
+  get: ({ get }) => {
     let orders = get(orderState);
-    if (orders && checks) {
-      return (
-        checks.length &&
-        checks
-          .map((item) => {
-            const { price, quantity } = item;
-            return +price * +quantity;
-          })
-          .reduce((prev, current, _) => prev + current)
-      );
+    if (orders) {
+      const result = orders
+        .map((item) => {
+          const { price, quantity } = item;
+          return +price * +quantity;
+        })
+        .reduce((prev, current, _) => prev + current);
+      return result;
     }
   },
 });

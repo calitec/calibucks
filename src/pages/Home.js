@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+import { memo } from "react";
 import { css } from "@emotion/react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
@@ -9,15 +10,16 @@ import {
   searchSelector,
   searchState,
 } from "../store/homeState";
-import Item from "../components/Item";
+import { NavLink } from "react-router-dom";
+import media from "../lib/media";
 
 export default function Home() {
   const data = useRecoilValue(homeState);
-  const [_, setDetail] = useRecoilState(detailState);
-  const keyword = useRecoilValue(searchState);
+  const { keyword } = useRecoilValue(searchState);
   const searchedData = useRecoilValue(searchSelector);
   const filteredData = useRecoilValue(filterSelector);
-  const [filter, setFilter] = useRecoilState(filterState);
+  const [_, setDetail] = useRecoilState(detailState);
+  const [__, setFilter] = useRecoilState(filterState);
 
   return (
     <section css={wrapper}>
@@ -72,8 +74,30 @@ export default function Home() {
   );
 }
 
+const Item = memo(({ id, image, name, price, onSelectItem }) => {
+  return (
+    <NavLink to={`/detail/${id}`}>
+      <li onClick={onSelectItem}>
+        <img src={`/images/${image}`} alt={image} />
+        <div>
+          <h3>{name}</h3>
+          <div>{Number(price).toLocaleString()} 원</div>
+        </div>
+      </li>
+    </NavLink>
+  );
+});
+
 const wrapper = css`
   .category {
+    position: fixed;
+    top: 48px;
+    width: 100%;
+    background-color: #ffffff;
+    ${media.desktop} {
+      width: 40%;
+      margin: 0 auto;
+    }
     ul {
       display: flex;
       justify-content: space-between;
@@ -84,7 +108,7 @@ const wrapper = css`
       }
     }
   }
-  ul {
+  > ul {
     width: 100%;
     a {
       float: left;

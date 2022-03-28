@@ -1,25 +1,25 @@
 /** @jsxImportSource @emotion/react */
 import { Link } from "react-router-dom";
 import { css } from "@emotion/react";
-import media from "../lib/media";
 import { useRecoilState } from "recoil";
 import { filterState, searchState } from "../store/homeState";
-import { useState } from "react";
+import media from "../lib/media";
 
 export default function Header() {
-  const [keyword, setKeyword] = useRecoilState(searchState);
+  const [search, setSearch] = useRecoilState(searchState);
   const [_, setFilter] = useRecoilState(filterState);
-  const [search, setSearch] = useState(false);
-  const onSearch = () => setSearch(!search);
+
+  const onSearch = () => {
+    setSearch((prev) => ({ ...prev, toggle: true }));
+  };
 
   const onChange = (e) => {
     setFilter("");
-    setKeyword(e.target.value);
+    setSearch((prev) => ({ ...prev, keyword: e.target.value }));
   };
 
   const onClose = () => {
-    setKeyword("");
-    setSearch(!search);
+    setSearch((prev) => ({ ...prev, keyword: "", toggle: false }));
   };
 
   return (
@@ -39,9 +39,14 @@ export default function Header() {
           <img src="/images/search.png" alt="" />
         </div>
       </nav>
-      {search && (
+      {search.toggle && (
         <div className="header-search">
-          <input type="text" autoFocus value={keyword} onChange={onChange} />
+          <input
+            type="text"
+            autoFocus
+            value={search.keyword}
+            onChange={onChange}
+          />
           <span onClick={onClose}>&times;</span>
         </div>
       )}
@@ -107,7 +112,7 @@ const wrapper = css`
       padding-left: 1em;
       width: 100%;
       height: 5vh;
-      box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
+      border: 1px solid #363636;
     }
     span {
       display: inline-block;

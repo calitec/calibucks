@@ -1,78 +1,102 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
+import media from "../lib/media";
 
 export default function Loading() {
   return (
     <section css={wrapper}>
-      <div className="img" />
-      <div className="name"></div>
-      <button>장바구니</button>
-      <div className="price"></div>
-      <div className="nutrition"></div>
-      <div className="description"></div>
-      <div className="description"></div>
-      <div className="description"></div>
+      <div className="category">
+        <ul>
+          <li>전체</li>
+          <li>콜드브루</li>
+          <li>블렌디드</li>
+        </ul>
+      </div>
+      <ul>
+        <li>
+          <div></div>
+          <span></span>
+        </li>
+        <li>
+          <div></div>
+          <span></span>
+        </li>
+        <li>
+          <div></div>
+          <span></span>
+        </li>
+        <li>
+          <div></div>
+          <span></span>
+        </li>
+        <li>
+          <div></div>
+          <span></span>
+        </li>
+        <li>
+          <div></div>
+          <span></span>
+        </li>
+      </ul>
     </section>
   );
 }
 
 const wrapper = css`
-  width: 100%;
-  font-size: 0.8em;
-  h3,
-  > div {
-    line-height: 18px;
-  }
-  > div {
-    -webkit-animation: skeleton-gradient 1.8s infinite ease-in-out;
-    animation: skeleton-gradient 1.8s infinite ease-in-out;
-    background-color: rgba(165, 165, 165, 0.1);
-    margin: 1em auto 1em 1em;
-    &.img {
-      width: 95%;
-      height: 390px;
-      padding: 0.5em 1em;
-      margin: 1em auto 0;
+  .category {
+    position: fixed;
+    top: 48px;
+    width: 100%;
+    background-color: #ffffff;
+    ${media.desktop} {
+      width: 40%;
+      margin: 0 auto;
     }
-    &.name {
-      width: 45vw;
-      height: 2vh;
-    }
-    &.price {
-      width: 25vw;
-      height: 2vh;
-    }
-    &.nutrition {
-      width: 35vw;
-      height: 2vh;
-    }
-    &.description {
-      height: 2vh;
-      &:nth-of-type(5) {
-        width: 80vw;
-      }
-      &:nth-of-type(6) {
-        width: 70vw;
-      }
-      &:last-of-type {
-        width: 60vw;
+    ul {
+      display: flex;
+      justify-content: space-between;
+      padding: 1em 0;
+      li {
+        flex: 1;
+        text-align: center;
       }
     }
   }
-  h3 {
-    font-weight: 700;
-    padding: 1em;
-  }
-  button {
-    display: block;
-    text-align: center;
-    background-color: #363636;
-    width: 95%;
-    margin: 0 auto;
-    color: #ffffff;
-    font-weight: 500;
-    line-height: 35px;
-    border-radius: 3px;
+  > ul {
+    width: 100%;
+    &::after {
+      display: block;
+      content: "";
+      clear: both;
+    }
+    li {
+      float: left;
+      width: calc(50% - 0.75em);
+      margin: 0.5em 0.5em;
+      &:nth-of-type(even) {
+        margin-left: 0;
+      }
+      div {
+        padding-top: 100%;
+        -webkit-animation: skeleton-gradient 1.8s infinite ease-in-out;
+        animation: skeleton-gradient 1.8s infinite ease-in-out;
+        background-color: rgba(165, 165, 165, 0.1);
+      }
+      span {
+        display: inline-block;
+        -webkit-animation: skeleton-gradient 1.8s infinite ease-in-out;
+        animation: skeleton-gradient 1.8s infinite ease-in-out;
+        background-color: rgba(165, 165, 165, 0.1);
+        width: 100%;
+        padding-top: 15%;
+        margin-top: 1em;
+      }
+    }
+    &::after {
+      display: block;
+      content: "";
+      clear: both;
+    }
   }
   @-webkit-keyframes skeleton-gradient {
     0% {

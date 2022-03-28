@@ -3,7 +3,7 @@ import { css } from "@emotion/react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { homeState, detailState } from "../store/homeState";
+import { homeState, detailState, searchState } from "../store/homeState";
 import { orderState } from "../store/orderState";
 import { toast } from "react-toastify";
 import Button from "./Button";
@@ -13,11 +13,13 @@ export default function Detail() {
   const data = useRecoilValue(homeState);
   const [detail, setDetail] = useRecoilState(detailState);
   const [order, setOrder] = useRecoilState(orderState);
+  const [search, setSearch] = useRecoilState(searchState);
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     const thisItem = data.filter((item) => item.id == id)[0];
     setDetail(thisItem);
+    setSearch({ ...search, keyword: "", toggle: false });
     console.log(id, "detail refresh!");
   }, []);
 

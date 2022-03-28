@@ -1,17 +1,17 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from "recoil";
-import Button from "../components/Button";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { getFullPriceSelector, orderState } from "../store/orderState";
 import { NavLink } from "react-router-dom";
+import Button from "../components/Button";
 
 export default function Order() {
   const [order, setOrder] = useRecoilState(orderState);
   const [checks, setChecks] = useState([]);
   const navigate = useNavigate();
-  const fullPrice = useRecoilValue(getFullPriceSelector(checks));
+  const fullPrice = useRecoilValue(getFullPriceSelector);
 
   const onCheckAll = (checked) => {
     if (checked) {
@@ -35,19 +35,33 @@ export default function Order() {
     }
   };
 
-  const onClearStore = () => setOrder([]);
+  const onIncrease = (item, quantity) => {
+    const increase = order.map((v, i) => {
+      if (item !== v) {
+        return v;
+      }
+      return {
+        ...v,
+        quantity: quantity < 10 ? quantity + 1 : 10,
+      };
+    });
+    setOrder(increase);
+  };
 
-  // const fullPrice = () => {
-  //   return (
-  //     checks.length &&
-  //     checks
-  //       .map((item) => {
-  //         const { price, quantity } = item;
-  //         return +price * +quantity;
-  //       })
-  //       .reduce((prev, current, index) => prev + current)
-  //   );
-  // };
+  const onDecrease = (item, quantity) => {
+    const decrease = order.map((v, i) => {
+      if (item !== v) {
+        return v;
+      }
+      return {
+        ...v,
+        quantity: quantity > 1 ? quantity - 1 : 1,
+      };
+    });
+    setOrder(decrease);
+  };
+
+  const onClearStore = () => setOrder([]);
 
   const onSubmit = () => {
     if (checks.length < 1) return;
@@ -86,40 +100,12 @@ export default function Order() {
                   <div className="order-count">
                     <span
                       className={quantity == 1 ? "inactivated" : ""}
-                      onClick={() => {
-                        const decrease = order.map((v, i) => {
-                          if (item !== v) {
-                            return v;
-                          }
-                          return {
-                            ...v,
-                            quantity: quantity > 1 ? quantity - 1 : 1,
-                          };
-                        });
-                        setOrder(decrease);
-                        setChecks([]);
-                      }}
+                      onClick={() => onDecrease(item, quantity)}
                     >
                       -
                     </span>
                     {quantity}
-                    <span
-                      onClick={() => {
-                        const increase = order.map((v, i) => {
-                          if (item !== v) {
-                            return v;
-                          }
-                          return {
-                            ...v,
-                            quantity: quantity < 10 ? quantity + 1 : 10,
-                          };
-                        });
-                        setOrder(increase);
-                        setChecks([]);
-                      }}
-                    >
-                      +
-                    </span>
+                    <span onClick={() => onIncrease(item, quantity)}>+</span>
                   </div>
                   <div className="detail-quantity-notice">
                     {quantity == 10 && "최대 수량입니다."}
@@ -136,7 +122,7 @@ export default function Order() {
         )}
         <div>총 주문 가격: {fullPrice} 원</div>
       </ul>
-      <Button onClick={onSubmit} activate={checks.length >= 1}>
+      <Button onClick={onSubmit} activated={checks.length >= 1}>
         결제하기
       </Button>
       <br />
