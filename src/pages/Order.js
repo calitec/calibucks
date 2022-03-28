@@ -129,7 +129,7 @@ export default function Order() {
         ) : (
           <div className="default">주문 할 상품이 없습니다</div>
         )}
-        <div>총 주문 가격: {fullPrice} 원</div>
+        <div>총 주문 가격: {fullPrice.toLocaleString()} 원</div>
       </ul>
       <Button onClick={onSubmit} activated={checks.length >= 1}>
         결제하기
