@@ -2,22 +2,13 @@
 import { memo } from "react";
 import { css } from "@emotion/react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import {
-  filterSelector,
-  filterState,
-  homeState,
-  searchSelector,
-  searchState,
-} from "../store/commonState";
+import { filterState, splittedDataSelector } from "../store/commonState";
 import { NavLink } from "react-router-dom";
 import media from "../lib/media";
 
 export default function Home() {
-  const data = useRecoilValue(homeState);
-  const { keyword } = useRecoilValue(searchState);
-  const searchedData = useRecoilValue(searchSelector);
-  const filteredData = useRecoilValue(filterSelector);
   const [__, setFilter] = useRecoilState(filterState);
+  const splittedDatas = useRecoilValue(splittedDataSelector);
 
   return (
     <section css={wrapper}>
@@ -28,9 +19,9 @@ export default function Home() {
           <li onClick={() => setFilter("blended")}>블렌디드</li>
         </ul>
       </div>
-      <ul>
-        {filteredData.length
-          ? filteredData.map((item, index) => {
+      <ul css={wrapper}>
+        {splittedDatas.length
+          ? splittedDatas.map((item, index) => {
               const { id, image, name, price } = item;
               const props = {
                 id,
@@ -40,27 +31,7 @@ export default function Home() {
               };
               return <List key={id} {...props} />;
             })
-          : keyword.length > 1
-          ? searchedData.map((item, index) => {
-              const { id, image, name, price } = item;
-              const props = {
-                id,
-                image,
-                name,
-                price,
-              };
-              return <List key={id} {...props} />;
-            })
-          : data.map((item, index) => {
-              const { id, image, name, price } = item;
-              const props = {
-                id,
-                image,
-                name,
-                price,
-              };
-              return <List key={id} {...props} />;
-            })}
+          : ""}
       </ul>
     </section>
   );

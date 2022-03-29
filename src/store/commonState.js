@@ -28,23 +28,18 @@ export const searchState = atom({
   },
 });
 
-export const filterSelector = selector({
-  key: "filterSelector",
+export const splittedDataSelector = selector({
+  key: "splittedDataSelector",
   get: ({ get }) => {
+    let home = get(homeState);
     let filter = get(filterState);
-    let home = get(homeState);
-    return home.filter((item) => {
-      return item.category == filter;
-    });
-  },
-});
-
-export const searchSelector = selector({
-  key: "searchSelector",
-  get: ({ get }) => {
-    let home = get(homeState);
     let search = get(searchState);
-    if (search) {
+
+    if (filter) {
+      return home.filter((item) => {
+        return item.category == filter;
+      });
+    } else if (search) {
       return home.filter((item) => {
         return (
           item.name
@@ -53,6 +48,37 @@ export const searchSelector = selector({
             .indexOf(search.keyword.split(" ").join("")) !== -1
         );
       });
+    } else {
+      return home;
     }
   },
 });
+
+// export const filterSelector = selector({
+//   key: "filterSelector",
+//   get: ({ get }) => {
+//     let filter = get(filterState);
+//     let home = get(homeState);
+//     return home.filter((item) => {
+//       return item.category == filter;
+//     });
+//   },
+// });
+
+// export const searchSelector = selector({
+//   key: "searchSelector",
+//   get: ({ get }) => {
+//     let home = get(homeState);
+//     let search = get(searchState);
+//     if (search) {
+//       return home.filter((item) => {
+//         return (
+//           item.name
+//             .split(" ")
+//             .join("")
+//             .indexOf(search.keyword.split(" ").join("")) !== -1
+//         );
+//       });
+//     }
+//   },
+// });
