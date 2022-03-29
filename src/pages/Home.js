@@ -1,14 +1,24 @@
 /** @jsxImportSource @emotion/react */
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import { css } from "@emotion/react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { filterState, splittedDataSelector } from "../store/commonState";
+import {
+  filterState,
+  searchState,
+  splittedDataSelector,
+} from "../store/commonState";
 import { NavLink } from "react-router-dom";
 import media from "../lib/media";
 
 export default function Home() {
   const [__, setFilter] = useRecoilState(filterState);
+  const [___, setSearch] = useRecoilState(searchState);
   const splittedDatas = useRecoilValue(splittedDataSelector);
+
+  useEffect(() => {
+    setFilter("");
+    setSearch("");
+  }, []);
 
   return (
     <section css={wrapper}>
@@ -39,15 +49,15 @@ export default function Home() {
 
 const List = memo(({ id, image, name, price }) => {
   return (
-    <NavLink to={`/detail/${id}`}>
-      <li>
+    <li>
+      <NavLink to={`/detail/${id}`}>
         <img src={`/images/${image}`} alt={image} />
         <div>
           <h3>{name}</h3>
           <div>{Number(price).toLocaleString()} 원</div>
         </div>
-      </li>
-    </NavLink>
+      </NavLink>
+    </li>
   );
 });
 
@@ -78,15 +88,14 @@ const wrapper = css`
       content: "";
       clear: both;
     }
-    a {
+    li {
       float: left;
       width: calc(50% - 0.75em);
-      margin: 0 auto;
       margin: 0 0.5em;
       &:nth-of-type(even) {
         margin-left: 0;
       }
-      li {
+      a {
         font-size: 0.8em;
         img {
           display: block;
