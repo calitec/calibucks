@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
-export default function Skeleton_spare() {
+export default function LoadingDetail() {
   return (
     <section css={wrapper}>
       <div className="img" />

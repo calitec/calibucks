@@ -10,16 +10,26 @@ export default function Header() {
   const [_, setFilter] = useRecoilState(filterState);
 
   const onSearch = () => {
-    setSearch((prev) => ({ ...prev, toggle: true }));
+    setSearch((prev) => ({
+      ...prev,
+      toggle: true,
+    }));
   };
 
   const onChange = (e) => {
     setFilter("");
-    setSearch((prev) => ({ ...prev, keyword: e.target.value }));
+    setSearch((prev) => ({
+      ...prev,
+      keyword: e.target.value,
+    }));
   };
 
   const onClose = () => {
-    setSearch((prev) => ({ ...prev, keyword: "", toggle: false }));
+    setSearch((prev) => ({
+      ...prev,
+      keyword: "",
+      toggle: false,
+    }));
   };
 
   return (

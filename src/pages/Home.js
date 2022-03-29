@@ -11,8 +11,8 @@ import { NavLink } from "react-router-dom";
 import media from "../lib/media";
 
 export default function Home() {
-  const [__, setFilter] = useRecoilState(filterState);
-  const [___, setSearch] = useRecoilState(searchState);
+  const [_, setFilter] = useRecoilState(filterState);
+  const [__, setSearch] = useRecoilState(searchState);
   const splittedDatas = useRecoilValue(splittedDataSelector);
 
   useEffect(() => {

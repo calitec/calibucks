@@ -3,7 +3,7 @@ import { css } from "@emotion/react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { searchState } from "../store/commonState";
+import { getDatas, searchState } from "../store/commonState";
 import { orderState } from "../store/orderState";
 import { toast } from "react-toastify";
 import Button from "../components/Button";
@@ -17,22 +17,31 @@ export default function Detail() {
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
-    const thisItem = data.filter((item) => item.id == id)[0];
-    setDetail(thisItem);
+    const result = data.filter((item) => item.id == id)[0];
+    setDetail(result);
     setSearch({ keyword: "", toggle: false });
     console.log(id, "detail refresh!");
   }, []);
 
-  const onDecrease = () =>
-    quantity > 1 && setQuantity((quantity) => quantity - 1);
+  const onDecrease = () => {
+    if (quantity > 1) {
+      setQuantity((quantity) => quantity - 1);
+    }
+  };
 
-  const onIncrease = () =>
-    quantity < 10 && setQuantity((quantity) => quantity + 1);
+  const onIncrease = () => {
+    if (quantity < 10) {
+      setQuantity((quantity) => quantity + 1);
+    }
+  };
 
-  const onChange = (e) => setQuantity(e.target.value);
+  const onChange = (e) => {
+    setQuantity(e.target.value);
+  };
 
   const onStoreItem = () => {
     const filtered = (item) => item.id == detail.id;
+
     if (order.findIndex(filtered) !== -1) {
       return toast.error("이미 장바구니에 존재합니다.");
     }

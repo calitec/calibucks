@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
@@ -12,10 +11,9 @@ import { NavLink } from "react-router-dom";
 import Button from "../components/Button";
 
 export default function Order() {
-  const [order, setOrder] = useRecoilState(orderState);
-  const [checks, setChecks] = useState([]);
-  const [checkAtom, setCheckAtom] = useRecoilState(checkState);
   const navigate = useNavigate();
+  const [order, setOrder] = useRecoilState(orderState);
+  const [checks, setChecks] = useRecoilState(checkState);
   const fullPrice = useRecoilValue(getFullPriceSelector);
 
   const onCheckAll = (checked) => {
@@ -24,23 +22,19 @@ export default function Order() {
         return item;
       });
       setChecks(idResult);
-      setCheckAtom(idResult);
     } else {
       setChecks([]);
-      setCheckAtom([]);
     }
   };
 
   const onCheck = (checked, item) => {
     if (checked) {
       setChecks([...checks, item]);
-      setCheckAtom([...checkAtom, item]);
     } else {
       const newItems = checks.filter((v) => {
         return item !== v;
       });
       setChecks(newItems);
-      setCheckAtom(newItems);
     }
   };
 
@@ -70,7 +64,9 @@ export default function Order() {
     setOrder(decrease);
   };
 
-  const onClearStore = () => setOrder([]);
+  const onClearStore = () => {
+    setOrder([]);
+  };
 
   const onSubmit = () => {
     if (checks.length < 1) return;

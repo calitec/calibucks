@@ -1,18 +1,18 @@
 import { atom, selector } from "recoil";
 import data from "../data.json";
 
-const datas = () => {
+export const getDatas = (item) => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       // reject(new Error());
-      resolve(data);
+      resolve(item);
     }, 500);
   });
 };
 
 export const homeState = atom({
   key: "homeState",
-  default: datas(),
+  default: getDatas(data),
 });
 
 export const filterState = atom({
