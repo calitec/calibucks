@@ -17,7 +17,10 @@ export default function Home() {
 
   useEffect(() => {
     setFilter("");
-    setSearch("");
+    setSearch({
+      keyword: "",
+      toggle: false,
+    });
   }, []);
 
   return (
