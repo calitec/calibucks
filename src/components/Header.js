@@ -114,7 +114,7 @@ const wrapper = css`
     width: 100%;
     z-index: 2;
     ${media.desktop} {
-      width: 50%;
+      width: 40%;
       left: 50%;
       transform: translateX(-50%);
     }
